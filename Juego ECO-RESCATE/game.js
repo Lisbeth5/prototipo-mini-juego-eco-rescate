@@ -123,15 +123,32 @@ GameScene.prototype.create = function () {
   let tex = 'platform';
 
   if (level === 1) {
-    layout = [[480,520],[200,440],[420,380],[640,320],[420,240],[200,200]];
+    layout = [[800, 250], // piso
+    [200, 440],
+    [420, 380],
+    [640, 320],
+    [420, 220],
+    [200, 200]];
   }
   if (level === 2) {
     tex = 'platform_beach';
-    layout = [[480,520],[150,420],[350,350],[550,300],[750,260],[600,200],[350,180]];
+    layout = [[280,600],
+    [150,450],
+    [350,350],
+    [550,300],
+    [750,260],
+    [600,200],
+    [350,180]];
   }
   if (level === 3) {
     tex = 'platform_city';
-    layout = [[480,520],[180,430],[380,360],[580,300],[780,240],[580,180],[300,150]];
+    layout = [[880,130],
+    [180,450],
+    [380,360],
+    [600,300],
+    [780,240],
+    [580,150],
+    [370,180]];
   }
 
   layout.forEach(p => {
@@ -139,7 +156,7 @@ GameScene.prototype.create = function () {
   });
 
   player = this.physics.add.sprite(80, 480, 'player')
-    .setScale(0.20)
+    .setScale(0.15)
     .setCollideWorldBounds(true);
 
   this.physics.add.collider(player, platforms);
@@ -154,7 +171,7 @@ GameScene.prototype.create = function () {
   this.physics.add.overlap(player, bins, recycleTrash, null, this);
 
   door = this.physics.add.staticSprite(930, 520, 'door_closed')
-    .setScale(0.26)
+    .setScale(0.25)
     .setOrigin(0.5, 1);
 
   this.physics.add.overlap(player, door, nextLevel, null, this);
@@ -218,7 +235,7 @@ function collectTrash(player, trash) {
 function spawnBins(scene) {
   [['bin_papel','papel'],['bin_vidrio','vidrio'],['bin_plastico','plastico']]
   .forEach((b,i)=>{
-    const bin = scene.add.sprite(300+i*160,520,b[0]).setScale(0.24).setOrigin(0.5,1);
+    const bin = scene.add.sprite(300+i*160,520,b[0]).setScale(0.20).setOrigin(0.5,1);
     bin.type = b[1];
     scene.physics.add.existing(bin,true);
     bins.add(bin);
