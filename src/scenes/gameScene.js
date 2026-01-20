@@ -27,7 +27,7 @@ export class GameScene extends Phaser.Scene {
 
     create() {
         this.carryingTrash = null;
-        globals.timeLeft = 60;
+        globals.timeLeft = 90;
 
         // Fondo según nivel
         const backgrounds = { 1: 'bg_forest', 2: 'bg_beach', 3: 'bg_city' };
@@ -38,6 +38,9 @@ export class GameScene extends Phaser.Scene {
         this.timeText = this.add.text(420, 15, 'Tiempo: ' + globals.timeLeft, { fontSize: '18px' });
         this.levelText = this.add.text(800, 15, 'Nivel: ' + globals.level, { fontSize: '18px' });
         this.carryText = this.add.text(20, 40, 'Cargando: Nada', { fontSize: '16px' });
+        this.contadorText = this.add.text(20,60, '', {fontSize: '16px'});
+
+
 
         // Plataformas
         this.platforms = this.physics.add.staticGroup();
@@ -86,18 +89,77 @@ export class GameScene extends Phaser.Scene {
             this.player.setVelocityY(-540);
         }
     }
+    
 
     setupLevelLayout() {
-        let layout = [];
-        let tex = 'platform';
-        if (globals.level === 1) layout = [[480,520],[200,440],[420,380],[640,320],[420,240],[200,200]];
-        if (globals.level === 2) { tex = 'platform_beach'; layout = [[480,520],[150,420],[350,350],[550,300],[750,260],[600,200],[350,180]]; }
-        if (globals.level === 3) { tex = 'platform_city'; layout = [[480,520],[180,430],[380,360],[580,300],[780,240],[580,180],[300,150]]; }
-        
-        layout.forEach(p => {
-            this.platforms.create(p[0], p[1], tex).setScale(0.1).refreshBody();
-        });
+    let layout = [];
+    let tex = 'platform';
+
+    // Tamaño y separación por nivel
+    let scale = 0.6;   
+    let gapX = 180;    
+    let gapY = 80;     
+
+
+    if (globals.level === 1) {
+        scale = 0.1;
+        gapX = 250;
+        gapY = 80;
+
+        layout = [
+            [480, 520],
+            [480 - gapX, 520 - gapY],
+            [480, 520 - gapY * 2],
+            [480 + gapX, 520 - gapY * 3],
+            [480, 520 - gapY * 4],
+            [480 - gapX, 510 - gapY * 5]
+        ];
     }
+
+
+    if (globals.level === 2) {
+        tex = 'platform_beach';
+
+        scale = 0.1;   
+        gapX = 200;    
+        gapY = 70;     
+
+        layout = [
+            [480, 520],                
+            [500 - gapX, 520 - gapY],           
+            [480 + gapX, 520 - gapY * 2],      
+            [480, 520 - gapY * 3],      
+            [480 + gapX, 520 - gapY * 4],     
+            [480 - gapX, 520 - gapY * 4.5]     
+        ];
+    }
+
+
+    if (globals.level === 3) {
+        tex = 'platform_city';
+        scale = 0.1;
+        gapX = 200;
+        gapY = 65;
+
+        layout = [
+            [480, 520],
+            [540 + gapX, 520 - gapY],
+            [480 - gapX, 520 - gapY * 2],
+            [480 + gapX, 520 - gapY * 3],
+            [480, 520 - gapY * 4],
+            [480 - gapX, 520 - gapY * 5]
+        ];
+    }
+
+    // CREACIÓN DE PLATAFORMAS
+    layout.forEach(p => {
+        this.platforms
+            .create(p[0], p[1], tex)
+            .setScale(scale)
+            .refreshBody();
+    });
+}
+
 
     spawnTrash() {
         const types = ['papel', 'vidrio', 'plastico'];
@@ -132,22 +194,48 @@ export class GameScene extends Phaser.Scene {
         });
     }
 
+
     recycleTrash(player, bin) {
-        if (this.carryingTrash === bin.type) {
-            this.carryingTrash = null;
-            this.carryText.setText('Cargando: Nada');
-            globals.score += 10;
-            this.scoreText.setText('Puntaje: ' + globals.score);
-            playRecycleSound();
-            if (this.trashGroup.countActive(true) === 0) this.door.setTexture('door_open');
+    if (this.carryingTrash === bin.type) {
+        if (bin.type === 'papel') globals.papel++;
+        if (bin.type === 'vidrio') globals.vidrio++;
+        if (bin.type === 'plastico') globals.plastico++;
+
+        this.carryingTrash = null;
+        this.carryText.setText('Cargando: Nada');
+
+        this.contadorText.setText(
+            'Papel: ' + globals.papel +
+            '\nVidrio: ' + globals.vidrio +
+            '\nPlástico: ' + globals.plastico
+        );
+
+        globals.score += 10;
+        this.scoreText.setText('Puntaje: ' + globals.score);
+        playRecycleSound();
+
+        if (this.trashGroup.countActive(true) === 0) {
+            this.door.setTexture('door_open');
         }
     }
+}
+
 
     nextLevelCheck() {
-        if (this.trashGroup.countActive(true) === 0 && !this.carryingTrash) {
-            this.timerEvent.remove();
-            if (globals.level === 3) this.scene.start('GameWinScene');
-            else this.scene.start('LevelCompleteScene');
+    if (this.trashGroup.countActive(true) === 0 && !this.carryingTrash) {
+
+        this.timerEvent.remove();
+        if (globals.level === 3) {
+
+            globals.papel = 0;
+            globals.vidrio = 0;
+            globals.plastico = 0;
+
+            this.scene.start('GameWinScene');
+        } 
+        else {
+            this.scene.start('LevelCompleteScene');
         }
     }
+}    
 }
