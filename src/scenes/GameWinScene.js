@@ -25,12 +25,10 @@ export class GameWinScene extends Phaser.Scene {
             ease: 'Back.Out'
         });
 
-
         this.add.text(480, 160, 'Has completado ECO-RESCATE', {
             fontSize: '18px',
             color: '#ffffff'
         }).setOrigin(0.5);
-
 
         const papelText = this.add.text(360, 210, '🧻 Papel: 0', {
             fontSize: '20px',
@@ -52,7 +50,6 @@ export class GameWinScene extends Phaser.Scene {
             color: '#f1c40f'
         });
 
-
         this.animateCounter(papelText, '🧻 Papel: ', globals.papel);
         this.animateCounter(vidrioText, '🍾 Vidrio: ', globals.vidrio);
         this.animateCounter(plasticoText, '🧴 Plástico: ', globals.plastico);
@@ -71,7 +68,7 @@ export class GameWinScene extends Phaser.Scene {
         btn.on('pointerover', () => btn.setStyle({ backgroundColor: '#2ecc71' }));
         btn.on('pointerout', () => btn.setStyle({ backgroundColor: '#27ae60' }));
 
-        
+
         btn.on('pointerdown', () => {
             globals.level = 1;
             globals.score = 0;
@@ -83,7 +80,7 @@ export class GameWinScene extends Phaser.Scene {
         });
     }
 
-
+    
     animateCounter(textObj, label, finalValue, pulse = false) {
         let current = 0;
 

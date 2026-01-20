@@ -221,21 +221,16 @@ export class GameScene extends Phaser.Scene {
 }
 
 
-    nextLevelCheck() {
+nextLevelCheck() {
     if (this.trashGroup.countActive(true) === 0 && !this.carryingTrash) {
 
         this.timerEvent.remove();
+
         if (globals.level === 3) {
-
-            globals.papel = 0;
-            globals.vidrio = 0;
-            globals.plastico = 0;
-
             this.scene.start('GameWinScene');
-        } 
-        else {
+        } else {
             this.scene.start('LevelCompleteScene');
         }
     }
-}    
+}
 }

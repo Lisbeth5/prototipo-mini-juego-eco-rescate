@@ -10,14 +10,13 @@ export class StartScene extends Phaser.Scene {
     }
 
     create() {
+        
         this.add.image(480, 270, 'bg_menu');
         this.add.text(300, 120, 'ECO-RESCATE', {
             fontSize: '40px',
             color: '#2ecc71',
             fontStyle: 'bold'
         });
-
-
         const panel = this.add.graphics();
         panel.fillGradientStyle(
             0xbaf5c8, 
@@ -26,13 +25,13 @@ export class StartScene extends Phaser.Scene {
             0xeafff0,
             1
         );
-
-        panel.fillRoundedRect(180, 180, 600, 180, 20);
+        panel.fillRoundedRect(180, 180, 600, 180, 20); 
         panel.lineStyle(2, 0x2ecc71, 0.8);
         panel.strokeRoundedRect(180, 180, 600, 180, 20);
 
+        
         this.add.text(200, 195, 
-            'Descripción:\nRecolecta la basura y deposítala en el contenedor correcto\npara proteger el medio ambiente.',
+            'Descripción:\nRecolecta basura y deposítala en el contenedor correcto\npara proteger el medio ambiente y asi sumar puntos.',
             {
                 fontSize: '16px',
                 color: '#145a32',
@@ -40,16 +39,15 @@ export class StartScene extends Phaser.Scene {
             }
         );
 
-
+    
         this.add.text(200, 255,
-            '¿Cómo jugar?\n• Usa las flechas ← → para moverte\n• Salta con ↑\n• Recoge la basura correcta\n• Tiempo estimado por cada nivel: 90 segundos\n• Cada recoleccion suma 10 puntos',
+            '¿Cómo jugar?\n• Usa las flechas ← → para moverte\n• Salta con ↑\n• Recoge la basura correcta\n• Tiempo estimado por cada nivel: 90 segundos\n• Cada recoleccion de basura suma 10 puntos',
             {
                 fontSize: '16px',
                 color: '#145a32',
                 wordWrap: { width: 560 }
             }
         );
-
 
         const btn = this.add.text(410, 390, 'EMPEZAR', {
             fontSize: '22px',
@@ -57,7 +55,6 @@ export class StartScene extends Phaser.Scene {
             color: '#ffffff',
             padding: { x: 20, y: 10 }
         }).setInteractive();
-
 
         btn.on('pointerdown', () => {
             globals.level = 1;
